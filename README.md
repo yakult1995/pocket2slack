@@ -6,6 +6,7 @@
 * PocketAPI(AccessTokenまで)
 
 ### 設定
+* ホームディレクトリにこのレポジトリをCloneする
 * 上記の情報を`.env`に書き込む
   * `.env.sample`を参考に
 
