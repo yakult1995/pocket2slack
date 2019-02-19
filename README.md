@@ -1,8 +1,9 @@
 ## PocketしたものをSlackに流すもの
 
 ### 事前準備
+* pipenv
+* docker, docker-compose
 * SlackBot
-* MySQL
 * PocketAPI(AccessTokenまで)
 
 ### 設定
