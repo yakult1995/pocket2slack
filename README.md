@@ -9,6 +9,9 @@
 #### Git
 * ホームディレクトリにこのレポジトリをCloneする
 
+#### pipenv
+* カレントディレクトリで`pipenv install`
+
 #### 環境変数
 * 上記の情報を`.env`に書き込む
   * `.env.sample`を参考に
@@ -25,6 +28,6 @@
 * `./docker`にて`docker-compose up -d`
 
 #### Python
-* `main.py`を実行するだけ
+* `pipenv run python main.py`を実行するだけ
 * DBに格納されてる情報との差分のみをSlackに流す
 * 個人的にはcronで毎分回してほぼリアルタイムでSlackに流している
