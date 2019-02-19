@@ -24,7 +24,7 @@
 
 
 ### 使用方法
-#### docker-compose
+#### MySQL
 * `./docker`にて`docker-compose up -d`
 
 #### Python
