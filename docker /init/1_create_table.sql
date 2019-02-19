@@ -1,0 +1,1 @@
+create table <DATABASE>.<TABLE>(id int not null primary key auto_increment,article_id bigint not null unique, article_url text not null, article_title char(255) not null)
