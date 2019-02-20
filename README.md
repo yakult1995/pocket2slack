@@ -10,6 +10,9 @@
 #### Git
 * ホームディレクトリにこのレポジトリをCloneする
 
+#### PocketのKeys取得
+* `.env`に`CONSUMER_KEY`を書いておいて`get_poket_authorization.py`を実行する
+
 #### pipenv
 * カレントディレクトリで`pipenv install`
 
