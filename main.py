@@ -3,7 +3,6 @@
 
 import requests
 import os
-import json
 from datetime import datetime
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -20,24 +19,6 @@ from sqlalchemy.orm.exc import NoResultFound
 mysql_info = 'mysql+pymysql://' + os.environ['MYSQL_USER'] + ':' + os.environ['MYSQL_PASSWORD'] + '@' + os.environ['MYSQL_HOST'] + '/' + os.environ['MYSQL_DATABASE'] + '?charset=utf8'
 engine = create_engine(mysql_info, echo=True)
 
-
-# 内容生成
-def make_message(article):
-    message_content = article['resolved_title'] + ' -> ' + article['resolved_url']
-    return message_content
-
-
-# SlackにPOSTする内容をセット
-def upload_message(text, SLACK_ROOM, SLACK_URL):
-    payload_dic = {
-        'text': text,
-        'channel': SLACK_ROOM,
-        'username': 'Pocket',
-        'icon_emoji': 'icon'
-    }
-
-    # SlackにPOST
-    r = requests.post(SLACK_URL, data=json.dumps(payload_dic))
 
 # API用のAttachment
 def make_attachement(article):
@@ -62,6 +43,7 @@ def make_attachement(article):
     }
     return slack_params
 
+
 # APIを通してメッセージ投稿
 def upload_message_by_api(attachment):
     headers = {
@@ -77,16 +59,18 @@ def upload_message_by_api(attachment):
         print("Request failed: %s", e)
 
 
-### Pocketのリスト取得
-payload = {'consumer_key': os.environ['CONSUMER_KEY'],
-               'access_token': os.environ['ACCESS_TOKEN'],
-               'state': 'unread'
-               }
+# Pocketのリスト取得
+payload = {
+    'consumer_key': os.environ['CONSUMER_KEY'],
+    'access_token': os.environ['ACCESS_TOKEN'],
+    'state': 'unread'
+}
+
 r = requests.post('https://getpocket.com/v3/get', data=payload)
 articles = r.json()['list']
 
 
-### MySQLとデータの整合性
+# MySQLとデータの整合性
 rows = engine.execute('SELECT * FROM article')
 for row in rows:
     print(row.article_id)
