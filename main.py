@@ -4,6 +4,7 @@
 import requests
 import os
 import json
+from datetime import datetime
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -37,6 +38,44 @@ def upload_message(text, SLACK_ROOM, SLACK_URL):
 
     # SlackにPOST
     r = requests.post(SLACK_URL, data=json.dumps(payload_dic))
+
+# API用のAttachment
+def make_attachement(article):
+    fields = []
+    field = {
+        'title': article['resolved_title'],
+        'value': article['resolved_url'],
+        'short': False
+    }
+    fields.append(field)
+# ---------------------------
+
+    attachment = {
+        "fallback": "Pocket新規アイテム",
+        "color": "#dd0000",
+        "title": "新規アイテムがPocketに登録されました",
+        "fields": fields,
+        "footer": "データ取得日次: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    slack_params = {
+        'channel': os.environ['CHANNEL_ID'],
+        'attachments': [attachment]
+    }
+    return slack_params
+
+# APIを通してメッセージ投稿
+def upload_message_by_api(attachment):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + os.environ['SLACK_TOKEN']
+    }
+    req = requests.post(os.environ['SLACK_MESSAGE_POST_URL'], headers=headers, json=attachment)
+    try:
+        req.raise_for_status()
+        print("Message posted..")
+        return req.json()
+    except requests.RequestException as e:
+        print("Request failed: %s", e)
 
 
 ### Pocketのリスト取得
@@ -72,8 +111,7 @@ for id in diff_id_list:
     # リストにあるものをDATABASEに登録
     ins = "INSERT INTO article (article_id, article_url, article_title) VALUES (%s, %s, %s)"
     engine.execute(ins, id, articles[str(id)]['resolved_url'], articles[str(id)]['resolved_title'])
-    message_content = make_message(articles[str(id)])
-    upload_message(message_content, os.environ['SLACK_CHANNEL'], os.environ['SLACK_WEBHOOK_URL'])
+    upload_message_by_api(make_attachement(articles[str(id)]))
 
 
 for index in articles:
