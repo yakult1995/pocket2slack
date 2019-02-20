@@ -53,7 +53,6 @@ def make_attachement(article):
     attachment = {
         "fallback": "Pocket新規アイテム",
         "color": "#dd0000",
-        "title": "新規アイテムがPocketに登録されました",
         "fields": fields,
         "footer": "データ取得日次: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
