@@ -12,6 +12,7 @@
 
 #### PocketのKeys取得
 * `.env`に`CONSUMER_KEY`を書いておいて`get_poket_authorization.py`を実行する
+* ブラウザに飛ばされた後認証してプログラムに戻ってきて１度エンターを押す。
 
 #### pipenv
 * カレントディレクトリで`pipenv install`
